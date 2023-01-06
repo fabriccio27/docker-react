@@ -1,11 +1,16 @@
-from node:16-alpine
+FROM node:16-alpine
+
+# to build an image from a dockerfile that isn't named "Dockerfile", we have to use the "f" flag
+# we have to run docker build -f Dockerfile.dev . 
 
 WORKDIR '/app'
 
 COPY package.json .
 
 RUN npm install
-
+# copying might not be the best way to go with big projects.
+# We can use volumes, so in the snapshot of the filesystem for the container, we have a reference of the source file system, not a real copy
+# they kind of work like port mapping, we're saying this outside of the container should be this inside the container
 COPY . .
 
 CMD npm run start
