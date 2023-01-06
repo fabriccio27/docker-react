@@ -3,14 +3,30 @@ FROM node:16-alpine
 # to build an image from a dockerfile that isn't named "Dockerfile", we have to use the "f" flag
 # we have to run docker build -f Dockerfile.dev . 
 
-WORKDIR '/app'
+#instead of root user, node user will have ownership
+USER node
 
-COPY package.json .
+# if we don't make this with node user, workdir will create the directory and set ownership to root user
+RUN mkdir -p /home/node/app
+WORKDIR /home/node/app
+# The inline chown commands will set ownership of the files you are copying from your local environment
+# to the node user in the container.
+# The end result is that some files and directories will no longer be owned by root
+# and no npm processes will be run by the root user. Instead, they will all be owned and run by the node user.
+
+COPY --chown=node:node  ./package.json ./
 
 RUN npm install
 # copying might not be the best way to go with big projects.
 # We can use volumes, so in the snapshot of the filesystem for the container, we have a reference of the source file system, not a real copy
 # they kind of work like port mapping, we're saying this outside of the container should be this inside the container
-COPY . .
+COPY --chown=node:node ./ ./
 
 CMD npm run start
+
+
+# we will run this container with
+# docker run -it -p 3000:3000 -v /home/node/app/node_modules -v ~/udemy/docker-and-kubernetes/frontend:/home/node/app fabriccio27:frontend
+
+# by saying -v /home/node/app/node_modules we are indicating that we are not setting a reference in the container for the local file system,
+# and that the container should use its own node_modules folder. This is called making a bookmark apparently
