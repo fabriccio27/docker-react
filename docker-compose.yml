@@ -1,0 +1,12 @@
+version: '3'
+services:
+  web:
+    # we need the suboptions, because the dockerfile it's not called 'Dockerfile'
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules # this basically says, do not try to map something out of the container to the node_modules inside of the container
+      - .:/app
