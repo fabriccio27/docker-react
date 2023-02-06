@@ -10,6 +10,6 @@ RUN npm run build
 
 # just by putting this second FROM statement we're indicating that the previous block has finished
 FROM nginx 
-
+EXPOSE 80
 # we know the destination folder by looking at the documentation of the nginx docker image
 COPY --from=builder /app/build /usr/share/nginx/html
