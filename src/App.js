@@ -7,7 +7,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload. (changed in feature branch, and also in deploy file)
+          Edit <code>src/App.js</code> and save to reload. (changed in feature branch, and also in deploy file. But reverted the last one)
         </p>
         <a
           className="App-link"
